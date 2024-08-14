@@ -1,0 +1,48 @@
+package chezubaProject;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class chezubaTestcase {
+
+	public static void main(String[] args) {
+
+		WebDriver driver=new ChromeDriver();
+		
+		driver.manage().window().maximize();
+		
+		driver.get("https://www.amazon.in/");
+		
+		if(driver.getCurrentUrl().contains("amazon")) {
+			System.out.println("Test passed: Valid URL");
+		}else {
+			System.out.println("Test failed: Invalid URL");
+		}
+		
+		WebElement searchbox = driver.findElement(By.id("twotabsearchtextbox"));
+		searchbox.sendKeys("mobile");
+		
+		WebElement searchbutton = driver.findElement(By.id("nav-search-submit-button"));
+		searchbutton.click();
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebElement resultsArea = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(text(), 'results for')]")));
+
+        String expectedText = "mobile";
+        if (resultsArea.getText().toLowerCase().contains(expectedText.toLowerCase())) {
+            System.out.println("Test passed: Expected text is present in the results area.");
+        } else {
+            System.out.println("Test failed: Expected text is not found in the results area.");
+        }
+        
+        driver.close();
+	}
+	
+
+}
